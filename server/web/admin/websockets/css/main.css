@@ -1,0 +1,114 @@
+html, body {
+	background-color: #909090;
+	height: 100%; 
+	margin: 0px; 
+	padding: 0px;
+	position: relative;
+	font-family: "Arial", Helvetica, sans-serif;
+	font-size: 10pt;
+}
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+
+select {
+	border: 1px solid black;
+}
+
+input {
+	border: 1px solid black;
+	padding: 2px 10px 2px 10px;
+}
+
+textarea {
+	padding: 2px 10px 2px 10px;
+	background-color: #5E271B;
+	color: #FA8E00;
+}
+
+#wsaddress {
+	width: 900px;
+	background-color: #0C0F3B;
+	color: #59BAFF;
+	height: 20;
+	vertical-align: middle;
+}
+
+.button {
+	-webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none;
+    
+    background-color: #26375C;
+	color: #89A2D6;
+	text-align: center;
+	border: 1px solid black;
+	font-weight: bold;
+}
+
+.button:hover {
+	background-color: #124996;
+	cursor: pointer;
+}
+
+.button:active {
+	background-color: #F7F011;
+}
+
+#connectButton {
+	width: 90px;
+	position: relative;
+	top: -23px;
+	left: 925px;
+}
+
+#connectionBar {
+	padding: 0px 0px 0px 0px;
+	width: 1000px;
+	height: 25px;
+}
+
+#wscommand {
+	width: 1000px;
+	height: 100px;
+}
+
+#sendCommand {
+	width: 1020px;
+}
+
+#console {
+	width: 1000px;
+	height: 800px;
+	background-color: #092400;
+	color: #6CFF4F;
+	border: 1px solid #6CFF4F;
+	padding: 10px 10px 10px 10px;
+	font-family: "Monospace", Monospace;
+	overflow: auto;
+}
+
+.time {
+	float: left;
+	margin: 0px 10px 0px 0px;
+	color: #13A835;
+}
+
+.conConnection {
+	color: yellow;
+}
+
+.conMessage {
+	color: #6CFF4F;
+}
+
+.conMessageOut {
+	color: #FA8E00;
+}
+
+.conError {
+	color: red;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link href="css/main.css" type="text/css" rel="stylesheet">
+        
+        <script charset="utf-8" type="text/javascript" src="libs/jquery-2.0.3.js"></script>
+		<script charset="utf-8" type="text/javascript" src="libs/jquery-ui-1.10.3.custom.js"></script>
+		<script charset="utf-8" type="text/javascript" src="libs/xdate.js"></script>
+		
+		<script charset="utf-8" type="text/javascript" src="js/websockets.js"></script>
+		<script charset="utf-8" type="text/javascript" src="js/main.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div id="controlPanel">
+        	<div id="connectionBar"><input type="text" id="wsaddress" name="wsaddress" value="localhost:8080" /><div id="connectButton" class="button">CONNECT</div></div>
+        	<textarea type="text" id="wscommand" name="wscommand" value=""></textarea><br />
+        	<div id="sendCommand" class="button">Send</div>
+        </div>
+        <div id="console"></div>
+    </body>
+</html>
