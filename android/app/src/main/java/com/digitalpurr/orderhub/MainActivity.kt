@@ -10,8 +10,17 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import android.os.Build
+import android.util.Log
+import org.java_websocket.handshake.ServerHandshake
+import org.java_websocket.client.WebSocketClient
+import java.net.URI
+import java.net.URISyntaxException
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private var mWebSocketClient: WebSocketClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +38,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        kotlin.run { connectWebSocket() }
+    }
+
+    private fun connectWebSocket() {
+        Log.i("Websocket", "Connecting...")
+        val uri: URI
+        try {
+            uri = URI("ws://192.168.1.31:8080/websocket")
+        } catch (e: URISyntaxException) {
+            e.printStackTrace()
+            return
+        }
+
+        mWebSocketClient = object : WebSocketClient(uri) {
+            override fun onOpen(serverHandshake: ServerHandshake) {
+                Log.i("Websocket", "Opened")
+                mWebSocketClient?.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL)
+            }
+
+            override fun onMessage(s: String) {
+                Log.d("Websocket", s)
+            }
+
+            override fun onClose(i: Int, s: String, b: Boolean) {
+                Log.i("Websocket", "Closed $s")
+            }
+
+            override fun onError(e: Exception) {
+                Log.i("Websocket", "Error " + e.message)
+            }
+        }
+        mWebSocketClient?.connect()
     }
 
     override fun onBackPressed() {
