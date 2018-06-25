@@ -16,6 +16,8 @@ import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 import java.net.URI
 import java.net.URISyntaxException
+import java.util.*
+import kotlin.concurrent.timerTask
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -55,7 +57,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onOpen(serverHandshake: ServerHandshake) {
                 Log.i("Websocket", "Opened")
                 mWebSocketClient?.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL)
-                mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_online)
+                runOnUiThread {
+                    mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_online)
+                }
             }
 
             override fun onMessage(s: String) {
@@ -64,15 +68,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             override fun onClose(i: Int, s: String, b: Boolean) {
                 Log.i("Websocket", "Closed $s")
-                mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
+                runOnUiThread {
+                    mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
+                }
             }
 
             override fun onError(e: Exception) {
                 Log.i("Websocket", "Error " + e.message)
-                mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
+                runOnUiThread {
+                    mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
+                }
             }
         }
         mWebSocketClient?.connect()
+        startPinging()
+    }
+
+    private fun startPinging() {
+        val timer = Timer()
+        timer.schedule(timerTask {
+            if (mWebSocketClient?.isOpen == true) { mWebSocketClient?.sendPing(); }
+        },0, 10000)
     }
 
     override fun onBackPressed() {
