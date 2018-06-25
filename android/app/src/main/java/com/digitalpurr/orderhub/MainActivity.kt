@@ -1,19 +1,19 @@
 package com.digitalpurr.orderhub
 
+import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import android.os.Build
-import android.util.Log
-import org.java_websocket.handshake.ServerHandshake
 import org.java_websocket.client.WebSocketClient
+import org.java_websocket.handshake.ServerHandshake
 import java.net.URI
 import java.net.URISyntaxException
 
@@ -21,6 +21,7 @@ import java.net.URISyntaxException
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var mWebSocketClient: WebSocketClient? = null
+    private var mOptionsMenu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-
-        kotlin.run { connectWebSocket() }
     }
 
     private fun connectWebSocket() {
@@ -56,6 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onOpen(serverHandshake: ServerHandshake) {
                 Log.i("Websocket", "Opened")
                 mWebSocketClient?.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL)
+                mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_online)
             }
 
             override fun onMessage(s: String) {
@@ -64,10 +64,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             override fun onClose(i: Int, s: String, b: Boolean) {
                 Log.i("Websocket", "Closed $s")
+                mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
             }
 
             override fun onError(e: Exception) {
                 Log.i("Websocket", "Error " + e.message)
+                mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
             }
         }
         mWebSocketClient?.connect()
@@ -84,6 +86,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+        mOptionsMenu = menu
+        kotlin.run { connectWebSocket() }
         return true
     }
 
