@@ -20,10 +20,6 @@ import java.net.URISyntaxException
 import java.util.*
 import kotlin.concurrent.timerTask
 import android.preference.PreferenceManager
-import android.content.SharedPreferences
-
-
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
