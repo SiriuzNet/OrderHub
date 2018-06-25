@@ -78,7 +78,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
                 }
 
-                Timer().schedule(timerTask { Log.d("Websoocket", "Reconnecting..."); mWebSocketClient?.reconnect() }, 3000)
+                Timer().schedule(timerTask {
+                    if (mWebSocketClient?.isOpen == false) {
+                        Log.d("Websoocket", "Reconnecting...")
+                        mWebSocketClient?.reconnect()
+                    }
+                }, 3000)
             }
 
             override fun onError(e: Exception) {
@@ -122,6 +127,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+                return true
+            }
+            R.id.online_indicator -> {
+                mWebSocketClient?.reconnect()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
