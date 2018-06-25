@@ -1,5 +1,6 @@
 package com.digitalpurr.orderhub
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -18,6 +19,10 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 import kotlin.concurrent.timerTask
+import android.preference.PreferenceManager
+import android.content.SharedPreferences
+
+
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -44,10 +49,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun connectWebSocket() {
-        Log.i("Websocket", "Connecting...")
         val uri: URI
         try {
-            uri = URI("ws://192.168.1.31:8080/websocket")
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            Log.d("Websocket", "Connecting: "+prefs.getString("serverUrl", "127.0.0.1:8080"))
+            uri = URI("ws://"+prefs.getString("serverUrl", resources.getString(R.string.pref_default_server_url))+"/websocket")
         } catch (e: URISyntaxException) {
             e.printStackTrace()
             return
@@ -114,7 +120,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.action_settings -> return true
+            R.id.action_settings -> {
+                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
