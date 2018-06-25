@@ -71,6 +71,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 runOnUiThread {
                     mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_offline)
                 }
+
+                Timer().schedule(timerTask { Log.d("Websoocket", "Reconnecting..."); mWebSocketClient?.reconnect() }, 3000)
             }
 
             override fun onError(e: Exception) {
