@@ -20,6 +20,7 @@ import java.net.URISyntaxException
 import java.util.*
 import kotlin.concurrent.timerTask
 import android.preference.PreferenceManager
+import com.digitalpurr.orderhub.commons.LoginRequest
 import java.util.concurrent.CompletableFuture
 import kotlin.concurrent.thread
 
@@ -60,7 +61,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mWebSocketClient = object : WebSocketClient(uri) {
             override fun onOpen(serverHandshake: ServerHandshake) {
                 Log.i("Websocket", "Opened")
-                mWebSocketClient?.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL)
+                try {
+                    mWebSocketClient?.send(LoginRequest(Build.SERIAL.toString()).toJson())
+                } catch (e: SecurityException) {
+                    Log.e("Security", "Unable to read device SERIAL")
+                }
                 runOnUiThread {
                     mOptionsMenu?.findItem(R.id.online_indicator)?.setIcon(android.R.drawable.presence_online)
                 }
