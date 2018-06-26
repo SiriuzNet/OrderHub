@@ -20,6 +20,8 @@ import java.net.URISyntaxException
 import java.util.*
 import kotlin.concurrent.timerTask
 import android.preference.PreferenceManager
+import java.util.concurrent.CompletableFuture
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -112,7 +114,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         mOptionsMenu = menu
-        kotlin.run { connectWebSocket() }
+        thread { connectWebSocket() }
         return true
     }
 
@@ -126,7 +128,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.online_indicator -> {
-                mWebSocketClient?.reconnect()
+                thread { mWebSocketClient?.reconnect() }
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
