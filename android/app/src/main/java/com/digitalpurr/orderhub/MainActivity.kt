@@ -21,7 +21,6 @@ import java.util.*
 import kotlin.concurrent.timerTask
 import android.preference.PreferenceManager
 import com.digitalpurr.orderhub.commons.LoginRequest
-import java.util.concurrent.CompletableFuture
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {

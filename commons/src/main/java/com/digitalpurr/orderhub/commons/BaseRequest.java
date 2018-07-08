@@ -1,5 +1,7 @@
 package com.digitalpurr.orderhub.commons;
 
+import java.lang.reflect.Type;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -11,9 +13,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.SerializedName;
 
-import java.lang.reflect.Type;
-
-abstract class AbstractRequest {
+public class BaseRequest {
     protected final static Gson GSON;
 
     static {
@@ -27,6 +27,14 @@ abstract class AbstractRequest {
 
     public String toJson() {
         return GSON.toJson(this);
+    }
+    
+    public final static RequestId deserializeRequestId(String message) {
+    	return GSON.fromJson(message, BaseRequest.class).id;
+    }
+    
+	public final static <T> T deserializeRequest(String input, Class<T> outputClass) {
+    	return (T) GSON.fromJson(input, outputClass);
     }
 
     private final static class ObjectTypeDeserializer implements JsonDeserializer<RequestId> {
